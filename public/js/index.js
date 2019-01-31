@@ -9,19 +9,19 @@ socket.on('disconnect', function () {
 });
 
 socket.on('newMessage', function (message) {
-	console.log('newMessage', message);
+	let formattedTime = moment(message.createdAt).format('k:mm');
 	let li = jQuery('<li></li>');
-	li.text(`${message.from}: ${message.text}`);
+	li.text(`${formattedTime} - ${message.from}: ${message.text}`);
 
 	jQuery('#messages').append(li);
 });
 
 socket.on('newLocationMessage', function (message) {
-	console.log('newLocationMessage', message);
+	let formattedTime = moment(message.createdAt).format('k:mm');
 	let li = jQuery('<li></li>');
 	let a = jQuery('<a target="_blank">My current location</a>');
 
-	li.text(`${message.from}: `);
+	li.text(`${formattedTime} - ${message.from}: `);
 	a.attr('href', message.url);
 	li.append(a);
 	jQuery('#messages').append(li);
@@ -30,7 +30,7 @@ socket.on('newLocationMessage', function (message) {
 jQuery('#message-form').on('submit', function (e) {
 	e.preventDefault();
 
-	let messageTextbox = jQuery('[name=message]')
+	let messageTextbox = jQuery('[name=message]');
 
 	socket.emit('createMessage', {
 		from: 'User',
